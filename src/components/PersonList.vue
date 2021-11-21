@@ -7,20 +7,28 @@
       :loading="loading"
       class="elevation-3"
     >
-      <template v-slot:[`item.sex`]="{ item }">
-        {{ titleize(item.sex) }}
+      <template v-slot:[`item.first_name`]="{ item }">
+        {{ item.attributes.first_name }}
       </template>
 
-      <template v-slot:[`item.birthDate`]="{ item }">
-        {{ formatDate(item.birthDate) }}
+      <template v-slot:[`item.last_name`]="{ item }">
+        {{ item.attributes.last_name }}
+      </template>
+
+      <template v-slot:[`item.sex`]="{ item }">
+        {{ titleize(item.attributes.sex) }}
+      </template>
+
+      <template v-slot:[`item.birth_date`]="{ item }">
+        {{ formatDate(item.attributes.birth_date) }}
       </template>
       
-      <template v-slot:[`item.deathDate`]="{ item }">
-        {{ formatDate(item.deathDate) }}
+      <template v-slot:[`item.death_date`]="{ item }">
+        {{ formatDate(item.attributes.death_date) }}
       </template>
       
       <template v-slot:[`item.actions`]="{ item }">
-        <a v-if="item.familyUrl" target="blank" :href="item.familyUrl" >
+        <a v-if="item.attributes.has_children" target="blank">
           Go to family page
           <v-icon color="white accent-4">mdi-link-box</v-icon>
         </a>
@@ -39,19 +47,20 @@ export default {
       loading: false,
       people: [],
       headers: [
-        { text: 'First Name', value: 'firstName' },
-        { text: 'Last Name', value: 'lastName' },
+        { text: 'First Name', value: 'first_name' },
+        { text: 'Last Name', value: 'last_name' },
         { text: 'Gender', value: 'sex' },
-        { text: 'Birthdate', value: 'birthDate' },
-        { text: 'Deathdate', value: 'deathDate' },
+        { text: 'Birthdate', value: 'birth_date' },
+        { text: 'Deathdate', value: 'death_date' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
     }
   },
   mounted() {
     this.loading = true
-    api.get('/people')
-      .then(res => this.people = res.data.people)
+    const token = this.$store.getters.stateToken
+    api.get('/people', {headers: {'Authorization': token}})
+      .then(res => this.people = res.data.data)
       .catch(err => console.log(err))
       .then(() => this.loading = false)
   },

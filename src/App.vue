@@ -1,22 +1,20 @@
 <template>
-  <v-app>
-    <v-main>
-      <PersonList />
-    </v-main>
-  </v-app>
+  <div id="app">
+    <NavBar />
+    <router-view/>
+  </div>
 </template>
 
 <script>
-import PersonList from './components/PersonList';
+import NavBar from '@/components/NavBar.vue'
 
 export default {
-  name: 'App',
-
   components: {
-    PersonList,
-  },
-};
+    NavBar
+  }
+}
 </script>
+
 
 <style lang="scss">
 #app {
@@ -24,10 +22,5 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-
-  a {
-    text-decoration: none;
-    color: #F5F5F5;
-  }
 }
 </style>
